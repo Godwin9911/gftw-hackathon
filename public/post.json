@@ -1,0 +1,58 @@
+[
+  {
+    "image": "../images/one.png",
+    "post_caption": "This is a caption by the author",
+    "wallet": "$alice.example",
+    "comment_one": "The first comment",
+    "comment_two": "The second comment",
+    "content_type": "premium"
+  },
+  {
+    "image": "../images/concert.jpg",
+    "post_caption": "This is a caption by the author",
+    "wallet": "$platform-owner.example",
+    "comment_one": "The first comment",
+    "comment_two": "The second comment",
+    "content_type": "standard"
+  },
+  {
+    "image": "../images/rock.jpeg",
+    "post_caption": "This is a caption by the author",
+    "wallet": "$bob.example",
+    "comment_one": "ipsum dolor sit amet",
+    "comment_two": "The second comment",
+    "content_type": "premium"
+  },
+  {
+    "image": "../images/test.png",
+    "post_caption": "This is a caption by the author",
+    "wallet": "$platform-owner.example",
+    "comment_one": "The first comment",
+    "comment_two": "The second comment",
+    "content_type": "standard"
+  },
+  {
+    "image": "../images/concert.jpg",
+    "post_caption": "This is a caption by the author",
+    "wallet": "$platform-owner.example",
+    "comment_one": "The first comment",
+    "comment_two": "The second comment",
+    "content_type": "standard"
+  },
+  {
+    "image": "../images/test.png",
+    "post_caption": "This is a caption by the author",
+    "wallet": "$connie.example",
+    "comment_one": "The first comment",
+    "comment_two": "The second comment",
+    "content_type": "premium"
+  },
+  {
+    "image": "../images/test.png",
+    "post_caption": "This is a caption by the author",
+    "wallet": "$dave.example",
+    "comment_one": "The first comment",
+    "comment_two": "The second comment",
+    "content_type": "premium"
+  }
+]

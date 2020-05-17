@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="monetization" content="$platform-owner.example">
+  <title>GFTW-Hackathon</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+  <main>
+    <h1>GFTW</h1>
+    <p>Click the `simulate bookmarklet` to start paying then click `view Premium` to see monetized content. Scroll to post to pay the owner, This website uses a 50/50 probabilist revenue to
+      sometimes pay the platform owner or the creators. The system favours videos as they'll earn more. Each creator earns per user engagement.
+    </p>
+    <div>
+      <div id="content"></div>
+    </div>
+    <div id="info">
+      <p><b>State:</b> <span id="state"></span></p>
+      <p><b>Mode:</b> <span id="mode">Not Monetized</span></p>
+      <button id="start-button" class="btn hidden">View Premium</button>
+      <button id="stop-button" class="btn" disabled>Stop Premium</button>
+      <p id="currentReciever"></p>
+    </div>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>This should be a comment section. as the user engages with the content, the owner of the post has 
+          already been set in the meta tag, the payment will continue. The Better the post the more engagement, hence more rewards</p>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>Lorem ipsum dolor  aut consequuntur, sed natus qui id iusto suscipit praesentium quidem, iste alias, velit omnis nisi doloribus ipsa eligendi at debitis!</p>
+  </footer>
+  <script src="./js/bundle.js"></script>
+</body>
+</html>
