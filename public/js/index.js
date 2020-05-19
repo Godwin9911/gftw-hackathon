@@ -1,34 +1,37 @@
 function showMonetizationState() {
+  const state = document.monetization.state;
+  if (state === 'started') {
+    document.getElementById('start-button').classList.remove('hidden');
+  }
   document.getElementById('state').innerText = document.monetization.state;
 }
 
-if (document.monetization) {
-  document.monetization.addEventListener(
-    "monetizationstop",
-    showMonetizationState
-  );
-  document.monetization.addEventListener(
-    "monetizationstart",
-    () => { 
-      showMonetizationState;
-      document.getElementById('start-button').classList.remove('hidden');
-    }
-  );
-  document.monetization.addEventListener(
-    "monetizationpending",
-    showMonetizationState
-  );
-  document.monetization.addEventListener(
-    'monetizationprogress', 
-    (e) => {
+function checkAndStartMonetization() {
+  if (document.monetization) {
+    document.monetization.addEventListener(
+      "monetizationstop",
       showMonetizationState
-      console.log('monetizationprogress', e.detail)
-    }
-  );
+    );
+    document.monetization.addEventListener(
+      "monetizationstart",
+      showMonetizationState
+    );
+    document.monetization.addEventListener(
+      "monetizationpending",
+      showMonetizationState
+    );
+    document.monetization.addEventListener(
+      'monetizationprogress', 
+      (e) => {
+        // showMonetizationState
+        // console.log('monetizationprogress', e.detail)
+      }
+    );
+  }
 }
 
 const pointers = {
-  '$platform-owner.example': 50,
+  '$coil.xrptipbot.com/JABJLDXNSje7h_bY26_6wg': 50,
   'creators': 50
 }
 
@@ -44,24 +47,8 @@ function pickPointer () {
   }
 }
 
-// TODO - simulate payment
-
 window.addEventListener('load', (e) => {
-  const stopButton = document.getElementById("stop-button");
-  const startButton = document.getElementById("start-button");
-  const monetizationTag = document.querySelector('meta[name="monetization"]');
-  const info = document.getElementById('info');
-  const mode = document.getElementById('mode');
-  const currentReciever = document.getElementById('currentReciever');
-  const windowWidth = window.innerWidth/2;
-  const windowHeight = window.innerHeight/2;
-  // const whoEarns = pickPointer();
-  // const whoEarns = '$platform-owner.example';
-  const whoEarns = 'creators';
-  
-  let isScrolling;
-  let currentWallet;
-
+  // show error for non-supported browsers
   if (!document.monetization) {
     const state = document.getElementById('state')
     state.innerText = '$ Not enabled in browser';
@@ -69,6 +56,33 @@ window.addEventListener('load', (e) => {
   } else {
     showMonetizationState();
   }
+  
+  const stopButton = document.getElementById("stop-button");
+  const startButton = document.getElementById("start-button");
+  const mode = document.getElementById('mode');
+  const currentReciever = document.getElementById('currentReciever');
+  const windowWidth = window.innerWidth/2;
+  const windowHeight = window.innerHeight/2;
+  let monetizationTag;
+
+  function addMonitizationMetaTag() {
+    monetizationTag = document.createElement('meta');
+    monetizationTag.name = 'monetization';
+    monetizationTag.content = '$coil.xrptipbot.com/JABJLDXNSje7h_bY26_6wg'
+    document.head.appendChild(monetizationTag);
+  }
+
+  (function ViewAsMonetized(){
+    addMonitizationMetaTag();
+    checkAndStartMonetization();
+  })();
+  
+  // const whoEarns = pickPointer();
+  // const whoEarns = '$coil.xrptipbot.com/JABJLDXNSje7h_bY26_6wg';
+  const whoEarns = 'creators';
+  
+  let isScrolling;
+  let currentWallet;
 
   // if post is standard we'll pay the platform owner, if post is premium, pay post creator.
   function payPostInView(){
@@ -80,8 +94,7 @@ window.addEventListener('load', (e) => {
     }
     currentWallet = wallet;
     // set meta content to wallet Id
-    monetizationTag.setAttribute('content', wallet)
-    // ---------------- form doc to start paying add the meta 
+    monetizationTag.setAttribute('content', wallet);
     return currentReciever.innerText = '💸 Paying ' + wallet;
   }
 
@@ -126,16 +139,25 @@ window.addEventListener('load', (e) => {
     });
 
   stopButton.addEventListener("click", () => {
-    // reload page to default non-monitized state
-    location.reload();
+    // remove monetization meta tag
+    document.querySelector('meta[name="monetization"]').remove();
+
+    //hide premium content
+    const premiumEl = document.querySelectorAll('.premium');
+    premiumEl.forEach((el) => el.classList.add('hidden'));
+
+    mode.innerText = 'Not Monitized';
+    currentReciever.innerText = '';
+
+    stopButton.disabled = true;
+    startButton.disabled = false;
   });
 
   startButton.addEventListener("click", () => {
     // if monetization tag is not in dom add it.
-    if (!document.querySelector('meta[name="monetization"]')) document.head.appendChild(monetizationTag);
-    mode.innerText = '💸 Monitized';
-
-    //pick who to pay
+    if (!document.querySelector('meta[name="monetization"]')) addMonitizationMetaTag();
+    
+    //pick who to pay - platform owner or creators
     pickWhoToPay();
 
     //Show premium content
@@ -148,6 +170,8 @@ window.addEventListener('load', (e) => {
     } else {
       currentReciever.innerText = 'Paying platform owner';
     }
+
+    mode.innerText = '💸 Monitized';
  
     stopButton.disabled = false;
     startButton.disabled = true;
@@ -161,16 +185,6 @@ window.addEventListener('load', (e) => {
     
     btn.forEach(b => b.addEventListener('click', () => {
       modal.style.display = "block";
-      //pay 
-      let wallet = b.parentElement.getAttribute('data-wallet');
-      // if current post owner is already being paid, continue paying
-      if (currentWallet === wallet ) {
-        return;
-      }
-      currentWallet = wallet;
-      // set meta content to wallet Id
-      monetizationTag.setAttribute('content', wallet)
-      return currentReciever.innerText = '💸 Paying ' + wallet;
     }));
 
     // Get the <span> element that closes the modal
