@@ -77,9 +77,9 @@ window.addEventListener('load', (e) => {
     mode.innerText = '💸 Monitized';
   })();
   
-  // const whoEarns = pickPointer();
+  const whoEarns = pickPointer();
   // const whoEarns = '$coil.xrptipbot.com/JABJLDXNSje7h_bY26_6wg';
-  const whoEarns = 'creators';
+  // const whoEarns = 'creators';
 
   // if post is standard we'll pay the platform owner, if post is premium, pay post creator.
   function payPostInView(entry){
