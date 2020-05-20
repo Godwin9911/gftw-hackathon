@@ -1,6 +1,6 @@
 [
   {
-    "image": "../images/one.png",
+    "image": "./images/one.png",
     "post_caption": "This is a caption by the author",
     "wallet": "$alice.example",
     "comment_one": "The first comment",
@@ -8,7 +8,7 @@
     "content_type": "premium"
   },
   {
-    "image": "../images/concert.jpg",
+    "image": "./images/test.png",
     "post_caption": "This is a caption by the author",
     "wallet": "$platform-owner.example",
     "comment_one": "The first comment",
@@ -16,7 +16,7 @@
     "content_type": "standard"
   },
   {
-    "image": "../images/rock.jpeg",
+    "image": "./images/two.png",
     "post_caption": "This is a caption by the author",
     "wallet": "$coil.xrptipbot.com/JABJLDXNSje7h_bY26_6wg",
     "comment_one": "ipsum dolor sit amet",
@@ -24,7 +24,7 @@
     "content_type": "premium"
   },
   {
-    "image": "../images/test.png",
+    "image": "./images/concert.png",
     "post_caption": "This is a caption by the author",
     "wallet": "$platform-owner.example",
     "comment_one": "The first comment",
@@ -32,7 +32,7 @@
     "content_type": "standard"
   },
   {
-    "image": "../images/concert.jpg",
+    "image": "./images/test.png",
     "post_caption": "This is a caption by the author",
     "wallet": "$platform-owner.example",
     "comment_one": "The first comment",
@@ -40,7 +40,7 @@
     "content_type": "standard"
   },
   {
-    "image": "../images/test.png",
+    "image": "./images/test.png",
     "post_caption": "This is a caption by the author",
     "wallet": "$connie.example",
     "comment_one": "The first comment",
@@ -48,7 +48,7 @@
     "content_type": "premium"
   },
   {
-    "image": "../images/test.png",
+    "image": "./images/concert.png",
     "post_caption": "This is a caption by the author",
     "wallet": "$dave.example",
     "comment_one": "The first comment",
