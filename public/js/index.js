@@ -56,14 +56,13 @@ window.addEventListener('load', (e) => {
   } else {
     showMonetizationState();
   }
-  
+
   const stopButton = document.getElementById("stop-button");
   const startButton = document.getElementById("start-button");
   const mode = document.getElementById('mode');
   const currentReciever = document.getElementById('currentReciever');
-  const windowWidth = window.innerWidth/2;
-  const windowHeight = window.innerHeight/2;
   let monetizationTag;
+  let currentWallet;
 
   function addMonitizationMetaTag() {
     monetizationTag = document.createElement('meta');
@@ -75,44 +74,24 @@ window.addEventListener('load', (e) => {
   (function ViewAsMonetized(){
     addMonitizationMetaTag();
     checkAndStartMonetization();
+    mode.innerText = '💸 Monitized';
   })();
   
   // const whoEarns = pickPointer();
   // const whoEarns = '$coil.xrptipbot.com/JABJLDXNSje7h_bY26_6wg';
   const whoEarns = 'creators';
-  
-  let isScrolling;
-  let currentWallet;
 
   // if post is standard we'll pay the platform owner, if post is premium, pay post creator.
-  function payPostInView(){
-    let el = document.elementFromPoint(windowWidth, windowHeight);
-    let wallet = el.getAttribute('data-wallet');
+  function payPostInView(entry){
+    let wallet = entry.target.getAttribute('data-wallet');
     // if current post owner is already being paid, continue paying
-    if (currentWallet === wallet ) {
-      return;
-    }
-    currentWallet = wallet;
-    // set meta content to wallet Id
-    monetizationTag.setAttribute('content', wallet);
-    return currentReciever.innerText = '💸 Paying ' + wallet;
-  }
-
-  // payEvent
-  function payEvent(){
-    window.clearTimeout(isScrolling);
-    isScrolling = setTimeout(payPostInView(), 400);
-  }
-
-  // pick who to pay, by default we are paying the platform owner
-  function pickWhoToPay() {
-    if (whoEarns === 'creators') {
-      //set eventlistener to get their wallet from their post when their post is in view
-      window.addEventListener('scroll', payEvent);
+    if (currentWallet !== wallet ) {
+      currentWallet = wallet;
+      // set meta content to wallet Id
+      monetizationTag.setAttribute('content', wallet);
+      currentReciever.innerText = '💸 Paying ' + wallet;
     }
   }
-
-  // TODO - add small sized video to page
 
   // Get dummy data
   fetch('post.json')
@@ -121,15 +100,15 @@ window.addEventListener('load', (e) => {
       const posts = data.map(post => {
         return `<div data-wallet="${post.wallet}" class="${(post.content_type === 'premium') ? 'hidden' : 'show'} ${post.content_type} post">
                   ${(post.content_type === 'premium') ? `<div class="post-desc"><p>	&#11088; Premium</p></div>` : ``}
-                  <div data-wallet="${post.wallet}">
-                    <img src="${post.image}" data-wallet="${post.wallet}"/>
-                    <div data-wallet="${post.wallet}">
+                  <div>
+                    <img src="${post.image}"/>
+                    <div>
                       <button class="btn c-btn my-btn">Comment</button>
-                      <p data-wallet="${post.wallet}">Caption:${post.post_caption}</p>
-                      <small data-wallet="${post.wallet}">${post.comment_one}</small><br>
-                      <small data-wallet="${post.wallet}">${post.comment_two}</small>
+                      <p><b>Caption:</b>${post.post_caption}</p>
+                      <small>${post.comment_one}</small><br>
+                      <small>${post.comment_two}</small>
                     </div>
-                    <div class="space" data-wallet="${post.wallet}"></div>
+                    <div class="space"></div>
                   </div>
                 </div>`
         }).join('');
@@ -137,6 +116,27 @@ window.addEventListener('load', (e) => {
         document.getElementById('content').innerHTML = posts;
         setUpCommentModal();
     });
+  
+  function observerIntersection() {
+    postElements = document.querySelectorAll(".post");
+
+    let options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.75
+    }
+
+    let observer = new IntersectionObserver(handleIntersect, options);
+    postElements.forEach(post => observer.observe(post));
+  }
+
+  function handleIntersect(entries) {
+    entries.forEach(entry => {
+      if (entry.intersectionRatio > 0.75) {
+        payPostInView(entry);
+      }
+    })
+  }
 
   stopButton.addEventListener("click", () => {
     // remove monetization meta tag
@@ -157,19 +157,15 @@ window.addEventListener('load', (e) => {
     // if monetization tag is not in dom add it.
     if (!document.querySelector('meta[name="monetization"]')) addMonitizationMetaTag();
     
-    //pick who to pay - platform owner or creators
-    pickWhoToPay();
+    // check who should earn
+    if (whoEarns !== 'creators') return currentReciever.innerText = 'Paying platform owner';
+
+    // Get and Pay post in viewport
+    observerIntersection();
 
     //Show premium content
     const premiumEl = document.querySelectorAll('.premium');
     premiumEl.forEach((el) => el.classList.remove('hidden'));
-
-    //pay the creator of the content currently in view.
-    if (whoEarns === 'creators') {
-      payPostInView();
-    } else {
-      currentReciever.innerText = 'Paying platform owner';
-    }
 
     mode.innerText = '💸 Monitized';
  
